@@ -4,10 +4,11 @@ import buildLoaders from "./buildLoaders";
 import buildResolves from "./buildResolves";
 import path from "path";
 import webpack from "webpack";
+import { buildDevServer } from "./buildDevserver";
 
 export function buildWebpackConfig(options: BuildOptions): webpack.Configuration{
 
-    const {paths, mode} = options
+    const {paths, mode, port} = options
 
     return(
         {
@@ -22,7 +23,9 @@ export function buildWebpackConfig(options: BuildOptions): webpack.Configuration
                 path: paths.build,
                 clean: true
             },
-            plugins: buildPlugins(options)
+            plugins: buildPlugins(options),
+            devtool: options.isDev ? 'inline-source-map' : undefined,
+            devServer: options.isDev ? buildDevServer(options) : undefined
         }
     )
 }
